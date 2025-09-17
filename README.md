@@ -55,7 +55,7 @@ El sistema está compuesto por los siguientes microservicios:
    cd imax
 
 
-#🤝 Contribuciones
+# 🤝 Contribuciones
 Las contribuciones son bienvenidas. Por favor:
 
 Haz un fork del proyecto
@@ -64,36 +64,36 @@ Commit tus cambios (git commit -m 'Add some AmazingFeature')
 Push a la rama (git push origin feature/AmazingFeature)
 Abre un Pull Request
 
-#📊 Estado del Proyecto
-#✅ Completado
+# 📊 Estado del Proyecto
+# ✅ Completado
 Definición de arquitectura
 Configuración inicial de microservicios
 
-#🚧 En Progreso
+# 🚧 En Progreso
 Servicio de Catálogo
 Servicio de Reservas
 Servicio de Notificaciones
 
-#📋 Pendiente
+# 📋 Pendiente
 API Gateway
 Service Discovery
 Frontend integrado
 Pipeline CI/CD
 Despliegue en cloud
 
-#📈 Próximas Mejoras
+# 📈 Próximas Mejoras
 Integración con pasarelas de pago reales
 Sistema de fidelización y puntos
 App móvil nativa
 Sistema de recomendaciones avanzado con machine learning
 Análisis de datos en tiempo real de ocupación
 
-#📞 Contacto
+# 📞 Contacto
 Paniagua Santiago - paniaguasanty10@gmail.com
 LinkedIn en mi perfil.
 
-#🙏 Agradecimientos
+# 🙏 Agradecimientos
 Comunidad de Java por las librerías y herramientas
 Plataformas de despliegue gratuitas por hacer posible mostrar el proyecto
 
-⭐️ ¡Si te gusta este proyecto, no olvides darle una estrella!
+# ⭐️ ¡Si te gusta este proyecto, no olvides darle una estrella!
