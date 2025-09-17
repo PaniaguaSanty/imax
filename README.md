@@ -51,5 +51,49 @@ El sistema está compuesto por los siguientes microservicios:
 
 1. Clona el repositorio:
    ```bash
-      git clone https://github.com/tu-usuario/imax.git
+      git clone https://github.com/Paniaguasanty/imax.git
    cd imax
+
+
+#🤝 Contribuciones
+Las contribuciones son bienvenidas. Por favor:
+
+Haz un fork del proyecto
+Crea una rama para tu feature (git checkout -b feature/AmazingFeature)
+Commit tus cambios (git commit -m 'Add some AmazingFeature')
+Push a la rama (git push origin feature/AmazingFeature)
+Abre un Pull Request
+
+#📊 Estado del Proyecto
+#✅ Completado
+Definición de arquitectura
+Configuración inicial de microservicios
+
+#🚧 En Progreso
+Servicio de Catálogo
+Servicio de Reservas
+Servicio de Notificaciones
+
+#📋 Pendiente
+API Gateway
+Service Discovery
+Frontend integrado
+Pipeline CI/CD
+Despliegue en cloud
+
+#📈 Próximas Mejoras
+Integración con pasarelas de pago reales
+Sistema de fidelización y puntos
+App móvil nativa
+Sistema de recomendaciones avanzado con machine learning
+Análisis de datos en tiempo real de ocupación
+
+#📞 Contacto
+Paniagua Santiago - paniaguasanty10@gmail.com
+LinkedIn en mi perfil.
+
+#🙏 Agradecimientos
+Comunidad de Java por las librerías y herramientas
+Plataformas de despliegue gratuitas por hacer posible mostrar el proyecto
+
+⭐️ ¡Si te gusta este proyecto, no olvides darle una estrella!
