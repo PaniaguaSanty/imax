@@ -19,6 +19,7 @@
 	<modules>
 		<module>imax-api-gateway</module>
 		<module>imax-eureka-config</module>
+		<module>imax-config-server</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
