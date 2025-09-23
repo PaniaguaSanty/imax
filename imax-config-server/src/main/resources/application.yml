@@ -1,0 +1,13 @@
+server:
+  port: 8888  # Puerto donde corre el Config Server
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native   # ? importante para usar archivos locales
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config
