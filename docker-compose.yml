@@ -1,0 +1,33 @@
+services:
+  config-server:
+    build: ./imax-config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - imax-net
+
+  eureka-server:
+    build: ./imax-eureka-config
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - imax-net
+    depends_on:
+      - config-server
+
+  api-gateway:
+    build:
+      context: ./imax-api-gateway
+      dockerfile: Dockerfile
+    container_name: imax-api-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+      - config-server
+
+networks:
+  imax-net:
+    driver: bridge

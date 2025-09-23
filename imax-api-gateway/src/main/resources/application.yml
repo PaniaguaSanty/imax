@@ -1,0 +1,8 @@
+server:
+  port: 8090   # Podés cambiar el puerto si ya hay otro servicio levantado
+
+spring:
+  application:
+    name: imax-api-gateway
+  config:
+    import: "optional:configserver:"
