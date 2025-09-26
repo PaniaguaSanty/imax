@@ -17,6 +17,22 @@ services:
     depends_on:
       - config-server
 
+  catalog-service:
+    build: ./imax-catalog-service
+    container_name: catalog-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://catalog-postgres:5432/catalogdb
+      SPRING_DATASOURCE_USERNAME: cataloguser
+      SPRING_DATASOURCE_PASSWORD: secretpassword
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - imax-net
+
   api-gateway:
     build:
       context: ./imax-api-gateway
@@ -27,7 +43,8 @@ services:
     depends_on:
       - eureka-server
       - config-server
+      - catalog-service
 
 networks:
   imax-net:
-    driver: bridge
+    external: true

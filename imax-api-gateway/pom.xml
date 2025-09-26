@@ -5,6 +5,9 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
+	<!-- TODO: EL API GATEWAY ES LO ULTIMO A CONFIGURAR
+	 DESARROLLAR EL RESTO DE MICROSERVICIOS CON NORMALIDAD Y POR ULTIMO FINALIZAR/DESCOMENTAR EL PLUGIN BUILD.
+	 -->
 	<!-- Herencia desde el POM padre -->
 	<parent>
 		<groupId>com.cinema</groupId>
@@ -51,5 +54,23 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+<!--
+	<build>
+		<plugins>
+			 Plugin de Spring Boot para generar un executable jar
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.2.0</version>  ajusta según tu versión de Spring Boot
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+-->
 </project>

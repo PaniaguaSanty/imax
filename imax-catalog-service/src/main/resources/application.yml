@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: imax-catalog-service
+
+  config:
+    import: "optional:configserver:"
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalogdb
+    username: cataloguser
+    password: secretpassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+tmdb:
+  api-key: e45bf974933312d09cde8e94a203b900
+  base-url: https://api.themoviedb.org/3

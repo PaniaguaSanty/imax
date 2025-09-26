@@ -22,6 +22,7 @@
 		<module>imax-api-gateway</module>
 		<module>imax-eureka-config</module>
 		<module>imax-config-server</module>
+		<module>imax-catalog-service</module>
 	</modules>
 
 	<properties>
