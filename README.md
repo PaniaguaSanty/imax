@@ -1,6 +1,4 @@
-# 🎬 Sistema de Gestión de Cine - IMAX
-
-Este proyecto es un sistema de gestión de cine desarrollado con una arquitectura de microservicios en Java Spring Boot. Permite a los usuarios explorar la cartelera, reservar entradas y recibir notificaciones por correo electrónico con sus boletos en formato QR.
+Sistema de gestión de cine desarrollado con una arquitectura de microservicios en Java Spring Boot. Permite a los usuarios explorar la cartelera, reservar entradas y recibir notificaciones por correo electrónico con sus boletos en formato QR.
 
 ## 🚀 Características
 
