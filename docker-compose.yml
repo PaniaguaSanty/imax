@@ -23,9 +23,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://catalog-postgres:5432/catalogdb
-      SPRING_DATASOURCE_USERNAME: cataloguser
-      SPRING_DATASOURCE_PASSWORD: secretpassword
+      SPRING_DATASOURCE_URL: ${DB_CATALOG_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_CATALOG_USER}
+      SPRING_DATASOURCE_PASSWORD:  ${DB_CATALOG_PASS}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     depends_on:
       - config-server
