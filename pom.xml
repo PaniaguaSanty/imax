@@ -23,6 +23,7 @@
 		<module>imax-eureka-config</module>
 		<module>imax-config-server</module>
 		<module>imax-catalog-service</module>
+		<module>imax-showTime-service</module>
 	</modules>
 
 	<properties>
