@@ -9,9 +9,9 @@ spring:
     import: "optional:configserver:"
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/catalogdb
-    username: cataloguser
-    password: secretpassword
+    url: ${DB_CATALOG_URL}
+    username: ${DB_CATALOG_USER}
+    password: ${DB_CATALOG_PASS}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -23,5 +23,5 @@ spring:
         format_sql: true
 
 tmdb:
-  api-key: e45bf974933312d09cde8e94a203b900
+  api-key: ${TMDB_API_KEY}
   base-url: https://api.themoviedb.org/3
