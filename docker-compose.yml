@@ -33,6 +33,22 @@ services:
     networks:
       - imax-net
 
+  showtime-service:
+    build: ./imax-showTime-service
+    container_name: showtime-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/showtimedb
+      SPRING_DATASOURCE_USERNAME: showtimeuser
+      SPRING_DATASOURCE_PASSWORD: secretpassword
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - imax-net
+
   api-gateway:
     build:
       context: ./imax-api-gateway

@@ -1,19 +1,18 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
-    name: imax-catalog-service
+    name: showTime-service
 
   config:
     import: "optional:configserver:"
 
   datasource:
-    url: ${DB_CATALOG_URL}
-    username: cataloguser
+    url: jdbc:postgresql://localhost:5433/showtimedb
+    username: showtimeuser
     password: secretpassword
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,7 +20,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-tmdb:
-  api-key: ${TMDB_API_KEY}
-  base-url: https://api.themoviedb.org/3
