@@ -10,8 +10,8 @@ spring:
 
   datasource:
     url: ${DB_CATALOG_URL}
-    username: cataloguser
-    password: secretpassword
+    username: ${DB_USER}
+    password: ${DB_PASS}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -21,6 +21,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: catalog-service
+    instance-id: catalog-service:8081
+    non-secure-port: 8081
 
 tmdb:
   api-key: ${TMDB_API_KEY}
