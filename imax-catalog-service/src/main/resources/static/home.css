@@ -1,0 +1,222 @@
+/* Variables de color para tema cine */
+:root {
+    --dark-blue: #0a1128;
+    --navy-blue: #1c2541;
+    --medium-blue: #3a506b;
+    --light-blue: #5bc0be;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --white: #ffffff;
+    --light-gray: rgba(255, 255, 255, 0.7);
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Estilos generales */
+body {
+    background: linear-gradient(
+        135deg,
+        var(--dark-blue) 0%,
+        var(--navy-blue) 30%,
+        var(--medium-blue) 70%,
+        var(--light-blue) 100%
+    );
+    background-attachment: fixed;
+    color: var(--white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-scrolled {
+    background: rgba(10, 17, 40, 0.95) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 120px 0 80px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    animation: slideDown 0.8s ease-out both;
+}
+
+.hero-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hero-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, var(--light-blue), transparent);
+    opacity: 0.3;
+}
+
+/* Cartelera Section */
+.cartelera-section {
+    padding: 5rem 0;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.movie-poster {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+}
+
+.movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-poster img {
+    transform: scale(1.05);
+}
+
+.no-poster {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy-blue);
+    font-size: 3rem;
+    color: var(--light-gray);
+}
+
+.movie-info {
+    padding: 1.5rem;
+}
+
+.movie-year {
+    color: var(--light-blue);
+    font-weight: 600;
+}
+
+.movie-rating {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+/* Experience Section */
+.experience-section {
+    padding: 5rem 0;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--light-blue);
+}
+
+/* Botones */
+.btn-cta {
+    background: linear-gradient(45deg, var(--light-blue), var(--gold));
+    border: none;
+    color: var(--dark-blue);
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(91, 192, 190, 0.3);
+}
+
+/* Footer */
+.footer {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem 0;
+}
+
+/* Animaciones */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(91, 192, 190, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px 5px rgba(91, 192, 190, 0.3);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .hero-section {
+        padding: 100px 0 60px;
+        text-align: center;
+    }
+
+    .movie-poster {
+        height: 300px;
+    }
+}
