@@ -9,9 +9,9 @@ spring:
     import: "optional:configserver:"
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/showtimedb
-    username: showtimeuser
-    password: secretpassword
+    url: ${DB_SHOWTIME_URL}
+    username: ${DB_SHOWTIME_USER}
+    password: ${DB_SHOWTIME_PASS}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,3 +20,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: showtime-service
+    instance-id: showtime-service:8082
+    non-secure-port: 8082
