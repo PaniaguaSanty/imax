@@ -1,0 +1,188 @@
+<!--
+
+    JUST AN IDEA...
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAX Cinema | Cartelera</title>
+     Bootstrap CSS
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    Bootstrap Icons
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+     CSS personalizado
+    <link rel="stylesheet" th:href="@{/home.css}" href="/static/home.css">
+</head>
+
+<body>
+ Navbar
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="bi bi-camera-reels me-2"></i>IMAX Cinema
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#cartelera">Cartelera</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#proximamente">Próximamente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experiencia">Experiencia IMAX</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+Hero Section
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4">Vive el cine en IMAX</h1>
+                <p class="lead mb-4">La experiencia cinematográfica más inmersiva con sonido envolvente y pantallas gigantes.</p>
+                <a href="#cartelera" class="btn btn-cta btn-lg">Ver Cartelera</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <img src="/static/img/imaxImage.jpg" class="img-fluid rounded-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ Cartelera Section
+<section id="cartelera" class="cartelera-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-4 fw-bold mb-3">En Cartelera</h2>
+                <p class="lead">Descubre las mejores películas en formato IMAX</p>
+            </div>
+        </div>
+
+         Search Bar
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <form th:action="@{/}" method="get" class="d-flex">
+                    <input type="text" name="query" class="form-control me-2" placeholder="Buscar películas..." th:value="${query}">
+                    <button type="submit" class="btn btn-outline-light">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+    Movies Grid
+        <div class="row" id="movies-container">
+            <div th:each="movie : ${movies}" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="movie-card">
+                    <div class="movie-poster">
+                        <img th:if="${movie.poster_path}"
+                             th:src="|https://image.tmdb.org/t/p/w500${movie.poster_path}|"
+                             th:alt="${movie.title}"
+                             class="img-fluid">
+                        <div th:unless="${movie.poster_path}" class="no-poster">
+                            <i class="bi bi-film"></i>
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <h5 th:text="${movie.title}">Título de la película</h5>
+                        LÍNEA CORREGIDA:
+                      <p class="movie-year" th:text="${movie.release_date != null} ? ${#strings.substring(movie.release_date,0,4)} : 'N/A'">2024</p>
+                        <div class="movie-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <span th:text="${movie.vote_average}">7.5</span>/10
+                        </div>
+                        <button class="btn btn-sm btn-outline-light mt-2">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        Loading State
+        <div th:if="${movies == null or movies.empty}" class="text-center">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando películas...</p>
+        </div>
+    </div>
+</section>
+
+Experiencia IMAX Section
+<section id="experiencia" class="experience-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-4 fw-bold">La Experiencia IMAX</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-aspect-ratio"></i>
+                    </div>
+                    <h4>Pantallas Gigantes</h4>
+                    <p>Hasta 40% más de imagen que las salas convencionales</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-volume-up"></i>
+                    </div>
+                    <h4>Sonido Inmersivo</h4>
+                    <p>Sistema de audio que te hace parte de la película</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-brightness-high"></i>
+                    </div>
+                    <h4>Máxima Claridad</h4>
+                    <p>Imágenes más brillantes y nítidas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ Footer
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><i class="bi bi-camera-reels me-2"></i>IMAX Cinema</h5>
+                <p>La mejor experiencia cinematográfica en la ciudad.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p>&copy; 2024 IMAX Cinema. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+ Bootstrap JS
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+ Script personalizado
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>
+
+-->

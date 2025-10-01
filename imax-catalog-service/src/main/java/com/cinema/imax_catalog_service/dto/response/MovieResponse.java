@@ -1,7 +1,7 @@
 package com.cinema.imax_catalog_service.dto.response;
 
-import com.cinema.imax_catalog_service.model.Movie;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieSearchResponse {
-    private Integer page;
-    private List<Movie> results;
+@Builder
+public class MovieResponse {
+
+    private Integer id;
+    private String title;
+    private String overview;
+    private String releaseDate;
+    private String posterPath;
+    private List<Integer> genreIds;
 }
