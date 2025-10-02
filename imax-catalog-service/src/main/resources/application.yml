@@ -24,9 +24,8 @@ spring:
 
 eureka:
   instance:
-    prefer-ip-address: false
-    hostname: catalog-service
-    instance-id: catalog-service:8081
+    prefer-ip-address: true   # mejor usar IP real que hostname inventado
+    instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8081
 
 tmdb:
