@@ -14,7 +14,6 @@ import java.util.List;
 @Builder
 public class Movie {
 
-
     @Id
     private Integer id;
 
@@ -33,6 +32,11 @@ public class Movie {
     @Column(name = "release_date", length = 255)
     private String releaseDate;
 
+    @Column(name = "duration")
+    private Integer duration;
+
+    @Column(name = "rating", length = 10) // PG, PG-13, R, etc.
+    private String rating;
 
     @ElementCollection
     private List<Integer> genreIds;

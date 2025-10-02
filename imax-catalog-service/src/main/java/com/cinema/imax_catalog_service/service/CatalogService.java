@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,5 +25,12 @@ public class CatalogService {
                 .collect(Collectors.toList());
     }
 
-    //TODO: get movie by id method..
+    public Optional<MovieResponse> getMovieById(Integer id) {
+        return movieRepository.findById(id)
+                .map(movieMapper::convertToDto);
+    }
+
+    public boolean isMovieInCatalog(Integer id) {
+        return movieRepository.existsById(id);
+    }
 }
