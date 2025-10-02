@@ -27,3 +27,18 @@ eureka:
     hostname: showtime-service
     instance-id: showtime-service:8082
     non-secure-port: 8082
+
+# ✅ Configuración básica de Feign (sin circuit breaker por ahora)
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic  # Cambia a 'full' si quieres ver más detalles en los logs
+
+# ✅ Logging para debug (opcional, puedes comentar después)
+logging:
+  level:
+    com.cinema.imax_showTime_service: DEBUG
+    com.cinema.imax_showTime_service.client: DEBUG
