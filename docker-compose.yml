@@ -25,7 +25,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: ${DB_CATALOG_URL}
       SPRING_DATASOURCE_USERNAME: ${DB_CATALOG_USER}
-      SPRING_DATASOURCE_PASSWORD:  ${DB_CATALOG_PASS}
+      SPRING_DATASOURCE_PASSWORD: ${DB_CATALOG_PASS}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     depends_on:
       - config-server
@@ -41,6 +41,22 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/showtimedb
       SPRING_DATASOURCE_USERNAME: showtimeuser
+      SPRING_DATASOURCE_PASSWORD: secretpassword
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - config-server
+      - eureka-server
+    networks:
+      - imax-net
+
+  reservation-service:
+    build: ./imax-reservation-service
+    container_name: reservation-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5434/reservationdb
+      SPRING_DATASOURCE_USERNAME: reservationuser
       SPRING_DATASOURCE_PASSWORD: secretpassword
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     depends_on:

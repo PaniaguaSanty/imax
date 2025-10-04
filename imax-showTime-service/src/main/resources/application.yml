@@ -23,7 +23,7 @@ spring:
 
 eureka:
   instance:
-    prefer-ip-address: false
+    prefer-ip-address: true
     hostname: showtime-service
     instance-id: showtime-service:8082
     non-secure-port: 8082

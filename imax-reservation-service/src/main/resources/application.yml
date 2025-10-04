@@ -1,0 +1,44 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: reservation-service
+  config:
+    import: "optional:configserver:"
+  datasource:
+    url: ${DB_RESERVATION_URL:jdbc:postgresql://localhost:5434/reservationdb}
+    username: ${DB_RESERVATION_USER:reservationuser}
+    password: ${DB_RESERVATION_PASS:secretpassword}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: reservation-service
+    instance-id: reservation-service:8083
+    non-secure-port: 8083
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+logging:
+  level:
+    com.cinema.imax_reservation_service: DEBUG

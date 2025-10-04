@@ -24,6 +24,7 @@
 		<module>imax-config-server</module>
 		<module>imax-catalog-service</module>
 		<module>imax-showTime-service</module>
+		<module>imax-reservation-service</module>
 	</modules>
 
 	<properties>
