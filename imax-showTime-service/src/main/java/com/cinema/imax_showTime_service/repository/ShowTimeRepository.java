@@ -18,18 +18,18 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
 
     List<ShowTime> findByMovieIdAndShowDate(Integer movieId, LocalDate date);
 
-    // ✅ Validar conflictos de horarios
-    boolean existsByRoomAndShowDateAndDuration(
+    // Validate scheduling conflicts
+    boolean existsByRoomAndShowDateAndShowTime(
             String room,
             LocalDate showDate,
-            LocalTime duration
+            LocalTime showTime
     );
 
-    // ✅ Obtener funciones disponibles (con asientos)
+    // Get available shows (with seats)
     @Query("SELECT s FROM ShowTime s WHERE s.showDate = :date AND s.availableSeats > 0")
     List<ShowTime> findAvailableShowTimesByDate(LocalDate date);
 
-    // ✅ Obtener funciones futuras de una película
-    @Query("SELECT s FROM ShowTime s WHERE s.movieId = :movieId AND s.showDate >= :date ORDER BY s.showDate, s.duration")
+    // Get future showtimes of a movie
+    @Query("SELECT s FROM ShowTime s WHERE s.movieId = :movieId AND s.showDate >= :date ORDER BY s.showDate, s.showTime")
     List<ShowTime> findUpcomingShowTimesByMovie(Integer movieId, LocalDate date);
 }

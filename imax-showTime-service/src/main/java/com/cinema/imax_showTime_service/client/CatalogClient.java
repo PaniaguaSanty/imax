@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @FeignClient(
-        name = "imax-catalog-service", // Nombre registrado en Eureka
-        path = "/catalog-service/api/movies", // Prefijo de las rutas
+        name = "imax-catalog-service", // Name registered in Eureka
+        path = "/catalog-service/api/movies", // Routes prefix
         fallback = CatalogClientFallback.class
 )
 public interface CatalogClient {

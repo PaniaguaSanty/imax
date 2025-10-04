@@ -21,50 +21,50 @@ public class ShowTime {
     private Long id;
 
     @Column(nullable = false)
-    private Integer movieId;  // ID de la película en TMDB
+    private Integer movieId;  // Movie ID in TMDB
 
     @Column(nullable = false, length = 50)
-    private String room; // ej: "Sala IMAX", "Sala 1"
+    private String room; // ej: "IMAX Theater", "Theater 1"
 
     @Column(nullable = false)
-    private LocalDate showDate; // Fecha de la función
+    private LocalDate showDate; // Function date
 
     @Column(nullable = false)
-    private LocalTime duration; // ✅ Hora de inicio de la función (era "duration" pero debería ser "showTime")
+    private LocalTime showTime; //Function start time (was "duration" but should be "showTime")
 
     @Column(nullable = false)
-    private Integer durationMinutes; // ✅ Duración en minutos (ej: 120 para 2 horas)
+    private Integer durationMinutes; //Duration in minutes (e.g., 120 for 2 hours)
 
     @Column(nullable = false)
-    private Integer maxCapacity; // Capacidad máxima de la sala
+    private Integer maxCapacity; // Maximum room capacity
 
     @Column(nullable = false)
-    private Integer availableSeats; // Asientos disponibles
+    private Integer availableSeats; // Available seats.
 
     @Column(length = 20)
     private String format; // "2D", "3D", "IMAX", etc.
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal price;  // ✅ Usar BigDecimal para valores monetarios
+    private BigDecimal price;  //Use BigDecimal for monetary values
 
-    // ==================== MÉTODOS DE UTILIDAD ====================
+    // ==================== UTILITY METHODS ====================
 
     /**
-     * Verifica si la función está agotada
+     * Check if the function is exhausted
      */
     public boolean isSoldOut() {
         return availableSeats == 0;
     }
 
     /**
-     * Obtiene la cantidad de asientos ocupados
+     * Gets the number of occupied seats
      */
     public Integer getOccupiedSeats() {
         return maxCapacity - availableSeats;
     }
 
     /**
-     * Calcula el porcentaje de ocupación
+     * Calculate the occupancy rate
      */
     public Double getOccupancyPercentage() {
         if (maxCapacity == 0) return 0.0;
@@ -72,7 +72,7 @@ public class ShowTime {
     }
 
     /**
-     * Verifica si hay asientos suficientes disponibles
+     * Verify if there is available seats.
      */
     public boolean hasAvailableSeats(Integer requiredSeats) {
         return availableSeats >= requiredSeats;
