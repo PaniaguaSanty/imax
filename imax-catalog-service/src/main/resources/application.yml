@@ -24,7 +24,7 @@ spring:
 
 eureka:
   instance:
-    prefer-ip-address: true   # mejor usar IP real que hostname inventado
+    prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8081
 

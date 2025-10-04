@@ -30,7 +30,7 @@ public class ShowTimeService {
     public ShowTime createShowTime(ShowTime showTime) {
         log.info("Creating showtime for movieId: {}", showTime.getMovieId());
 
-        // ✅ Validar que la película existe en el catálogo
+        // Validates if a movie exist in the catalog.
         Boolean movieExists = catalogClient.movieExists(showTime.getMovieId());
         if (!Boolean.TRUE.equals(movieExists)) {
             log.error("Movie with ID {} does not exist in catalog", showTime.getMovieId());

@@ -22,10 +22,9 @@ public class ShowTimeController {
 
     private final ShowTimeService showTimeService;
 
-    // ==================== CRUD BÁSICO ====================
-
+    // ==================== BASIC CRUD ====================
     /**
-     * Crear nueva función
+     * Create new function
      */
     @PostMapping
     public ResponseEntity<ShowTime> createShowTime(@RequestBody ShowTime showTime) {
@@ -39,7 +38,7 @@ public class ShowTimeController {
     }
 
     /**
-     * Obtener todas las funciones
+     * Get all functions
      */
     @GetMapping
     public ResponseEntity<List<ShowTime>> getAllShowTimes() {
@@ -47,7 +46,7 @@ public class ShowTimeController {
     }
 
     /**
-     * Obtener función por ID
+     * Get function by ID
      */
     @GetMapping("/{id}")
     public ResponseEntity<ShowTime> getShowTimeById(@PathVariable Long id) {
@@ -57,7 +56,7 @@ public class ShowTimeController {
     }
 
     /**
-     * Obtener funciones por fecha (solo datos de ShowTime)
+     * Get showtimes by date (ShowTime data only)
      */
     @GetMapping("/date/{date}")
     public ResponseEntity<List<ShowTime>> getShowTimesByDate(
@@ -65,10 +64,10 @@ public class ShowTimeController {
         return ResponseEntity.ok(showTimeService.getShowTimesByDate(date));
     }
 
-    // ==================== ENDPOINTS CON INFO DE PELÍCULAS ====================
+    // ==================== ENDPOINTS WITH MOVIES INFO. ====================
 
     /**
-     * ✅ Obtener funciones con información de película por fecha
+     * Get showtimes with movie information by date
      */
     @GetMapping("/date/{date}/with-movies")
     public ResponseEntity<List<ShowTimeWithMovieDTO>> getShowTimesWithMovieInfo(
@@ -77,7 +76,7 @@ public class ShowTimeController {
     }
 
     /**
-     * ✅ Obtener funciones de una película específica (con info de película)
+     * Get showtimes for a specific movie (with movie information)
      */
     @GetMapping("/movie/{movieId}")
     public ResponseEntity<List<ShowTimeWithMovieDTO>> getShowTimesByMovie(
@@ -85,10 +84,10 @@ public class ShowTimeController {
         return ResponseEntity.ok(showTimeService.getShowTimesByMovieWithInfo(movieId));
     }
 
-    // ==================== ENDPOINTS DEL CATÁLOGO (Proxy) ====================
+    // ==================== CATALOG ENDPOINTS (Proxy) ====================
 
     /**
-     * ✅ Obtener películas en cartelera desde el catálogo
+     * Get movies currently showing from the catalog
      */
     @GetMapping("/catalog/now-playing")
     public ResponseEntity<List<MovieDTO>> getNowPlayingMovies() {
@@ -97,7 +96,7 @@ public class ShowTimeController {
     }
 
     /**
-     * ✅ Obtener película por ID desde el catálogo
+     * Get movie by ID from the catalog
      */
     @GetMapping("/catalog/movies/{movieId}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable Integer movieId) {
@@ -109,7 +108,7 @@ public class ShowTimeController {
     }
 
     /**
-     * ✅ Verificar si una película existe en el catálogo
+     * Check if a movie exists in the catalog
      */
     @GetMapping("/catalog/movies/{movieId}/exists")
     public ResponseEntity<Boolean> movieExists(@PathVariable Integer movieId) {
@@ -117,12 +116,11 @@ public class ShowTimeController {
         return ResponseEntity.ok(exists);
     }
 
-    // ==================== RESERVAS ====================
 
     /**
-     * ✅ Reservar asientos
+     * Reserve seats(FOR PRIVATE EVENTS ONLY(FOR THE MOMENT XD)).
      */
-    @PatchMapping("/{id}/reserve")
+    @PatchMapping("/internal/{id}/reserve")
     public ResponseEntity<ShowTime> reserveSeats(
             @PathVariable Long id,
             @RequestParam Integer seats) {
