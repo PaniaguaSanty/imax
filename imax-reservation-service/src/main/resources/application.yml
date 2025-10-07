@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: reservation-service
+    name: imax-reservation-service
   config:
     import: "optional:configserver:"
   datasource:
@@ -22,14 +22,8 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-    hostname: reservation-service
-    instance-id: reservation-service:8083
+    instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8083
-  client:
-    service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
-    fetch-registry: true
-    register-with-eureka: true
 
 feign:
   client:
@@ -39,6 +33,31 @@ feign:
         readTimeout: 5000
         loggerLevel: basic
 
+# ===========================================
+# MERCADOPAGO CONFIGURATION
+# ===========================================
+
+mercadopago:
+  # Credenciales de MercadoPago
+  access-token: ${MERCADOPAGO_ACCESS_TOKEN}
+  public-key: ${MERCADOPAGO_PUBLIC_KEY}
+
+  # URLs de notificación (ajustar para producción)
+  notification-url: ${MERCADOPAGO_NOTIFICATION_URL:http://localhost:8083/reservation-service/api/reservations/webhook/mercadopago}
+
+  # URLs de retorno
+  success-url: ${MERCADOPAGO_SUCCESS_URL:http://localhost:8083/reservation-service/api/reservations/payment/success}
+  failure-url: ${MERCADOPAGO_FAILURE_URL:http://localhost:8083/reservation-service/api/reservations/payment/failure}
+  pending-url: ${MERCADOPAGO_PENDING_URL:http://localhost:8083/reservation-service/api/reservations/payment/pending}
+
 logging:
   level:
     com.cinema.imax_reservation_service: DEBUG
+
+reservation:
+  # Tiempo de expiración de reservas en minutos
+  expiration-time-minutes: 10
+  # Número máximo de asientos por reserva
+  max-seats-per-reservation: 10
+  # Intervalo de tarea programada para cancelar reservas (ms)
+  cancellation-task-interval: 60000

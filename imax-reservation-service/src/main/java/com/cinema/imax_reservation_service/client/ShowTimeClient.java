@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
-        name = "imax-showTime-service", // Name registered in Eureka
-        path = "/showTime-service/api/showtimes", // Routes prefix
+        name = "imax-showtime-service",
+        path = "/showtime-service/api/showtimes",
         fallback = ShowTimeClientFallback.class
 )
 public interface ShowTimeClient {
-
     @GetMapping("/{id}")
     ShowTimeDTO getShowTimeById(@PathVariable Long id);
 
