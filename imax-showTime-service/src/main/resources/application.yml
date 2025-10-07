@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: showTime-service
+    name: imax-showtime-service
 
   config:
     import: "optional:configserver:"
@@ -24,8 +24,7 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-    hostname: showtime-service
-    instance-id: showtime-service:8082
+    instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8082
 
 # ✅ Configuración básica de Feign (sin circuit breaker por ahora)

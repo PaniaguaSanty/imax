@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/showTime-service/api/showtimes")
+@RequestMapping("/showtime-service/api/showtimes")
 @RequiredArgsConstructor
 @Slf4j
 public class ShowTimeController {
