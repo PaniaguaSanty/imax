@@ -8,10 +8,11 @@ spring:
   config:
     import: "optional:configserver:"
 
+  # ==================== DATABASE ====================
   datasource:
     url: ${DB_CATALOG_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    username: ${DB_CATALOG_USER}
+    password: ${DB_CATALOG_PASS}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,12 +23,63 @@ spring:
       hibernate:
         format_sql: true
 
+  # ==================== KAFKA ====================
+  kafka:
+    # Se toma de variable de entorno o default
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+
+    producer:
+      # Serialización
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+      # Confiabilidad y garantías de entrega
+      acks: all  # Espera confirmación de todas las réplicas en el ISR
+      retries: 3  # Reintentos automáticos
+
+      # Idempotencia: evita duplicados aunque se reintente
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1  # Mantiene orden con idempotencia
+        linger.ms: 10  # Espera 10ms para hacer batch de mensajes
+        batch.size: 16384  # Tamaño del batch en bytes
+        compression.type: snappy  # Compresión para eficiencia
+
+    # Configuración de topics
+    topics:
+      movie-events: movie-events-topic
+      showtime-events: showtime-events-topic  # Para el futuro
+
+# ==================== EUREKA ====================
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8081
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
 
+# ==================== TMDB ====================
 tmdb:
   api-key: ${TMDB_API_KEY}
   base-url: https://api.themoviedb.org/3
+
+# ==================== LOGGING ====================
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: INFO
+    org.springframework.kafka: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# ==================== ACTUATOR (opcional pero recomendado) ====================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

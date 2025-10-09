@@ -1,0 +1,12 @@
+# application-local.yml
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  # 1. URL de conexión local: apuntas a tu Docker host (localhost)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalog_db
+    # 2. Credenciales directas (ya no se resuelven de una E.V.)
+    username: cataloguser
+    password: secretpassword
