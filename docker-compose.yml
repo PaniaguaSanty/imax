@@ -1,9 +1,84 @@
 services:
+  # ========== INFRA ==========
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - imax-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # LISTENERS: interno (kafka:9092) y host (localhost:29092) para debug local
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+    ports:
+      - "9092:9092"
+      - "29092:29092"   # puerto para acceder a kafka desde tu máquina host (IDE)
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - imax-net
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: imax-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    ports:
+      - "8085:8080"
+    networks:
+      - imax-net
+
+  # ========== CONFIG & DISCOVERY ==========
+
   config-server:
     build: ./imax-config-server
     container_name: config-server
     ports:
       - "8888:8888"
+    # si quieres servir configs desde ./config-repo lo mapeamos
+    volumes:
+      - ./config-repo:/config-repo
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+      SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS: /config-repo
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     networks:
       - imax-net
 
@@ -12,10 +87,71 @@ services:
     container_name: eureka-server
     ports:
       - "8761:8761"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
     networks:
       - imax-net
-    depends_on:
-      - config-server
+
+  # ========== DATABASES (uno por microservicio) ==========
+
+  catalog-postgres:
+    image: postgres:14
+    container_name: catalog-postgres
+    environment:
+      POSTGRES_DB: catalog_db
+      POSTGRES_USER: ${DB_CATALOG_USER}
+      POSTGRES_PASSWORD: ${DB_CATALOG_PASS}
+    ports:
+      - "5432:5432" # Puerto 5432 reservado para Catalog
+  # ... (Resto del servicio)
+
+  showtime-postgres:
+    image: postgres:14
+    container_name: showtime-postgres
+    environment:
+      POSTGRES_DB: showtime_db
+      POSTGRES_USER: ${DB_SHOWTIME_USER}
+      POSTGRES_PASSWORD: ${DB_SHOWTIME_PASS}
+    ports:
+      - "5433:5432" # Corregido: Mapea puerto local 5433 al puerto interno 5432
+    volumes:
+      - showtime-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_SHOWTIME_USER} -d showtime_db || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - imax-net
+
+  reservation-postgres:
+    image: postgres:14
+    container_name: reservation-postgres
+    environment:
+      POSTGRES_DB: reservation_db
+      POSTGRES_USER: ${DB_RESERVATION_USER}
+      POSTGRES_PASSWORD: ${DB_RESERVATION_PASS}
+    ports:
+      - "5434:5432" # Corregido: Mapea puerto local 5434 al puerto interno 5432
+    volumes:
+      - reservation-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_RESERVATION_USER} -d reservation_db || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - imax-net
+
+  # ========== MICROSERVICIOS (cada uno en su contenedor) ==========
 
   catalog-service:
     build: ./imax-catalog-service
@@ -23,15 +159,25 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: ${DB_CATALOG_URL}
-      SPRING_DATASOURCE_USERNAME: ${DB_CATALOG_USER}
-      SPRING_DATASOURCE_PASSWORD: ${DB_CATALOG_PASS}
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      DB_CATALOG_URL: jdbc:postgresql://catalog-postgres:5432/catalog_db
+      DB_CATALOG_USER: ${DB_CATALOG_USER}
+      DB_CATALOG_PASS: ${DB_CATALOG_PASS}
+      TMDB_API_KEY: ${TMDB_API_KEY}
     depends_on:
-      - config-server
-      - eureka-server
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      catalog-postgres:
+        condition: service_healthy
     networks:
       - imax-net
+    restart: on-failure
 
   showtime-service:
     build: ./imax-showTime-service
@@ -39,15 +185,24 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/showtimedb
-      SPRING_DATASOURCE_USERNAME: showtimeuser
-      SPRING_DATASOURCE_PASSWORD: secretpassword
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://showtime-postgres:5432/showtime_db
+      SPRING_DATASOURCE_USERNAME: ${DB_SHOWTIME_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_SHOWTIME_PASS}
     depends_on:
-      - config-server
-      - eureka-server
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      showtime-postgres:
+        condition: service_healthy
     networks:
       - imax-net
+    restart: on-failure
 
   reservation-service:
     build: ./imax-reservation-service
@@ -55,15 +210,24 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5434/reservationdb
-      SPRING_DATASOURCE_USERNAME: reservationuser
-      SPRING_DATASOURCE_PASSWORD: secretpassword
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://reservation-postgres:5432/reservation_db
+      SPRING_DATASOURCE_USERNAME: ${DB_RESERVATION_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_RESERVATION_PASS}
     depends_on:
-      - config-server
-      - eureka-server
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      reservation-postgres:
+        condition: service_healthy
     networks:
       - imax-net
+    restart: on-failure
 
   api-gateway:
     build:
@@ -72,11 +236,23 @@ services:
     container_name: imax-api-gateway
     ports:
       - "8090:8090"
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     depends_on:
-      - eureka-server
-      - config-server
-      - catalog-service
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - imax-net
+    restart: on-failure
 
 networks:
   imax-net:
-    external: true
+    driver: bridge
+
+volumes:
+  catalog-data:
+  showtime-data:
+  reservation-data:

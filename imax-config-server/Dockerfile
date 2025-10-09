@@ -1,6 +1,11 @@
 # Usamos la imagen oficial de OpenJDK 17
 FROM eclipse-temurin:17-jdk-alpine
 
+# ¡PASO CLAVE! Instalar curl
+# apk update actualiza la lista de paquetes.
+# apk add curl instala la herramienta curl.
+RUN apk update && apk add curl
+
 # Directorio dentro del contenedor
 WORKDIR /app
 
