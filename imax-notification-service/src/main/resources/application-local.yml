@@ -1,0 +1,24 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  kafka:
+    bootstrap-servers: localhost:29092
+
+  datasource:
+    url: jdbc:postgresql://localhost:5435/notification_db
+    username: notificationuser
+    password: secretpassword
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
+    com.cinema.imax_notification_service: WARN
+    org.apache.zookeeper: WARN

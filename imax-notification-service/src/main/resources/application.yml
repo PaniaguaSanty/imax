@@ -1,0 +1,89 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: imax-notification-service
+
+  config:
+    import: "optional:configserver:"
+
+  # ==================== DATABASE (opcional) ====================
+  datasource:
+    url: jdbc:postgresql://notification-postgres:5432/notification_db
+    username: notificationuser
+    password: secretpassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ==================== KAFKA CONSUMER ====================
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+
+    consumer:
+      # Identificacion unica del grupo
+      group-id: notification-service-group
+
+      # Deserializacion
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      # Comportamiento de offset
+      auto-offset-reset: earliest  # Lee desde el principio si no hay offset
+      enable-auto-commit: false  # Commit manual para garantias
+
+      # Propiedades del deserializador JSON
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: movieEvent:com.cinema.imax_notification_service.dto.event.MovieEvent
+
+      # Performance
+      max-poll-records: 10
+      fetch-min-size: 1024
+      fetch-max-wait-ms: 500
+
+    # Configuracion del listener
+    listener:
+      ack-mode: manual  # Commit manual
+      concurrency: 1  # Threads consumidores
+
+    # Topics
+    topics:
+      movie-events: movie-events-topic
+
+# ==================== EUREKA ====================
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    non-secure-port: 8084
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://eureka-server:8761/eureka/}
+
+# ==================== LOGGING ====================
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: INFO
+    org.springframework.kafka: DEBUG
+    com.cinema.imax_notification_service: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# ==================== ACTUATOR ====================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
