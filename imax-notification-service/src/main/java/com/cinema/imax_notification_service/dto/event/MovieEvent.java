@@ -1,5 +1,6 @@
-package com.cinema.imax_catalog_service.dto.event;
+package com.cinema.imax_notification_service.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieEvent {
 
-    private String eventId;  // UUID único para idempotencia
-    private String eventType;  // SYNC_COMPLETED, MOVIE_ADDED, MOVIE_UPDATED, MOVIE_REMOVED
+    private String eventId;
+    private String eventType;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
+
     private SyncEventData data;
 
     @Data
@@ -24,14 +28,11 @@ public class MovieEvent {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SyncEventData {
-        // Metadata de la sincronización
         private Integer totalMoviesInCatalog;
         private Integer moviesAdded;
         private Integer moviesUpdated;
         private Integer moviesRemoved;
-        private String syncSource;  // "TMDB"
-
-        // Lista de películas sincronizadas (opcional, para enviar las películas completas)
+        private String syncSource;
         private List<MovieData> movies;
     }
 
@@ -40,7 +41,6 @@ public class MovieEvent {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MovieData {
-
         private Integer id;
         private String title;
         private String originalTitle;
@@ -50,13 +50,6 @@ public class MovieEvent {
         private String rating;
         private String posterPath;
         private List<Integer> genreIds;
-
-        // URL completa del poster (helper)
-        public String getFullPosterUrl() {
-            if (posterPath != null && !posterPath.isEmpty()) {
-                return "https://image.tmdb.org/t/p/w500" + posterPath;
-            }
-            return null;
-        }
+        private String fullPosterUrl;
     }
 }

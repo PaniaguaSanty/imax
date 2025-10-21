@@ -1,6 +1,5 @@
 services:
   # ========== INFRA ==========
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -111,7 +110,15 @@ services:
       POSTGRES_PASSWORD: ${DB_CATALOG_PASS}
     ports:
       - "5432:5432" # Puerto 5432 reservado para Catalog
-  # ... (Resto del servicio)
+    volumes:
+      - catalog-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_CATALOG_USER} -d catalog_db || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - imax-net
 
   showtime-postgres:
     image: postgres:14
@@ -150,6 +157,26 @@ services:
       retries: 10
     networks:
       - imax-net
+
+  notification-postgres:
+    image: postgres:14
+    container_name: notification-postgres
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: ${DB_NOTIFICATION_USER}
+      POSTGRES_PASSWORD: ${DB_NOTIFICATION_PASS}
+    ports:
+      - "5435:5432"
+    volumes:
+      - notification-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_NOTIFICATION_USER} -d notification_db || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - imax-net
+
 
   # ========== MICROSERVICIOS (cada uno en su contenedor) ==========
 
@@ -229,6 +256,33 @@ services:
       - imax-net
     restart: on-failure
 
+  notification-service:
+    build:
+      context: .
+      dockerfile: ./imax-notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://notification-postgres:5432/notification_db
+      SPRING_DATASOURCE_USERNAME: ${DB_NOTIFICATION_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_NOTIFICATION_PASS}
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      notification-postgres:
+        condition: service_healthy
+    networks:
+      - imax-net
+    restart: on-failure
+
   api-gateway:
     build:
       context: ./imax-api-gateway
@@ -256,3 +310,4 @@ volumes:
   catalog-data:
   showtime-data:
   reservation-data:
+  notification-data:
