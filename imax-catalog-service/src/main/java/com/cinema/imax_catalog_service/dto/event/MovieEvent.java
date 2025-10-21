@@ -40,6 +40,7 @@ public class MovieEvent {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MovieData {
+
         private Integer id;
         private String title;
         private String originalTitle;
