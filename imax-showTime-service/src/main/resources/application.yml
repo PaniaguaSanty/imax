@@ -16,7 +16,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
@@ -27,16 +26,15 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
     non-secure-port: 8082
 
-# ✅ Configuración básica de Feign (sin circuit breaker por ahora)
+# Basic feign config. (without circuit breaker, for now :) )
 feign:
   client:
     config:
       default:
         connectTimeout: 5000
         readTimeout: 5000
-        loggerLevel: basic  # Cambia a 'full' si quieres ver más detalles en los logs
+        loggerLevel: basic  #'full' if you want to see more details.
 
-# ✅ Logging para debug (opcional, puedes comentar después)
 logging:
   level:
     com.cinema.imax_showTime_service: DEBUG

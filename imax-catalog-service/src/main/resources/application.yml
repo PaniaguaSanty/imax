@@ -70,7 +70,7 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-# ==================== ACTUATOR (opcional pero recomendado) ====================
+# ==================== ACTUATOR ====================
 management:
   endpoints:
     web:
