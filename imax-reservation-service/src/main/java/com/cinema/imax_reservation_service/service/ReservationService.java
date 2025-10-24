@@ -104,6 +104,14 @@ public class ReservationService {
         return reservationRepository.findByShowTimeId(showTimeId);
     }
 
+    public ShowTimeDTO getShowTimeById(Long id) {
+        return showTimeClient.getShowTimeById(id);
+    }
+
+    public ShowTimeDTO reserveSeatsInShowTime(Long id, Integer seats) {
+        return showTimeClient.reserveSeats(id, seats);
+    }
+
     @Transactional
     public Reservation confirmPayment(UUID reservationId, String paymentId) {
         log.info("Confirming payment for reservation: {}", reservationId);

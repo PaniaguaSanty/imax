@@ -120,7 +120,7 @@ public class ShowTimeController {
     /**
      * Reserve seats(FOR PRIVATE EVENTS ONLY(FOR THE MOMENT XD)).
      */
-    @PatchMapping("/internal/{id}/reserve")
+    @PutMapping("/internal/{id}/reserve")
     public ResponseEntity<ShowTime> reserveSeats(
             @PathVariable Long id,
             @RequestParam Integer seats) {

@@ -7,7 +7,7 @@ spring:
   config:
     import: "optional:configserver:"
   datasource:
-    url: ${DB_RESERVATION_URL:jdbc:postgresql://localhost:5434/reservationdb}
+    url: ${DB_RESERVATION_URL:jdbc:postgresql://localhost:5434/reservation_db}
     username: ${DB_RESERVATION_USER:reservationuser}
     password: ${DB_RESERVATION_PASS:secretpassword}
     driver-class-name: org.postgresql.Driver

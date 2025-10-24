@@ -128,7 +128,7 @@ services:
       POSTGRES_USER: ${DB_SHOWTIME_USER}
       POSTGRES_PASSWORD: ${DB_SHOWTIME_PASS}
     ports:
-      - "5433:5432" # Corregido: Mapea puerto local 5433 al puerto interno 5432
+      - "5433:5432"
     volumes:
       - showtime-data:/var/lib/postgresql/data
     healthcheck:
@@ -147,7 +147,7 @@ services:
       POSTGRES_USER: ${DB_RESERVATION_USER}
       POSTGRES_PASSWORD: ${DB_RESERVATION_PASS}
     ports:
-      - "5434:5432" # Corregido: Mapea puerto local 5434 al puerto interno 5432
+      - "5434:5432"
     volumes:
       - reservation-data:/var/lib/postgresql/data
     healthcheck:

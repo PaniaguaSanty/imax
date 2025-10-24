@@ -112,6 +112,34 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getReservationsByShowTime(@PathVariable Long showTimeId) {
         return ResponseEntity.ok(reservationService.getReservationsByShowTime(showTimeId));
     }
+    // ===================== TEST FEIGN CLIENT CONNECTION =====================
+
+    @GetMapping("/showtimes/{id}")
+    public ResponseEntity<?> getShowTimeFromShowtimeService(@PathVariable Long id) {
+        try {
+            // Llamada directa al Feign Client
+            var showTime = reservationService.getShowTimeById(id);
+            return ResponseEntity.ok(showTime);
+        } catch (Exception e) {
+            log.error("Error fetching showtime {}", id, e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(Map.of("error", "Error contacting showtime-service", "message", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/showtimes/{id}/reserve")
+    public ResponseEntity<?> reserveSeatsInShowtimeService(
+            @PathVariable Long id,
+            @RequestParam Integer seats) {
+        try {
+            var updated = reservationService.reserveSeatsInShowTime(id, seats);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            log.error("Error reserving seats in showtime-service", e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(Map.of("error", "Error contacting showtime-service", "message", e.getMessage()));
+        }
+    }
 
     /**
      * Confirmar pago (webhook o llamada manual)
