@@ -51,7 +51,7 @@ public class MovieSyncService {
             List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
 
             if (results == null || results.isEmpty()) {
-                log.warn("⚠️ No se obtuvieron películas de TMDB");
+                log.warn("No se obtuvieron películas de TMDB");
                 return;
             }
 
@@ -67,7 +67,7 @@ public class MovieSyncService {
                     successCount++;
                 } catch (Exception e) {
                     failCount++;
-                    log.error("❌ Error loading movie with ID: {}, error: {}",
+                    log.error("Error loading movie with ID: {}, error: {}",
                             movieMap.get("id"), e.getMessage());
                 }
             }
@@ -94,20 +94,20 @@ public class MovieSyncService {
                 movieRepository.deleteAll();
                 movieRepository.saveAll(newMovies);
 
-                log.info("✅ Completed sync: {} saved movies, {} errors",
+                log.info("Completed sync: {} saved movies, {} errors",
                         successCount, failCount);
-                log.info("📊 Stats - Added: {}, Updated: {}, Removed: {}",
+                log.info("Stats - Added: {}, Updated: {}, Removed: {}",
                         moviesAdded, moviesUpdated, moviesRemoved);
 
                 // 6. Publish event on Kafka
                 publishSyncEvent(newMovies, moviesAdded, moviesUpdated, moviesRemoved);
 
             } else {
-                log.warn("⚠️ Couldn't save movies in the db.");
+                log.warn(" Couldn't save movies in the db.");
             }
 
         } catch (Exception e) {
-            log.error("❌ Critical error during sync: {}", e.getMessage(), e);
+            log.error("Critical error during sync: {}", e.getMessage(), e);
         }
     }
 
@@ -134,11 +134,11 @@ public class MovieSyncService {
             // Publicar en Kafka
             movieEventProducer.publishSyncCompletedEvent(syncData);
 
-            log.info("📨 Evento de sincronización enviado a Kafka");
+            log.info("Evento de sincronización enviado a Kafka");
 
         } catch (Exception e) {
             // No fallar la sincronización si Kafka falla
-            log.error("⚠️ Error al publicar evento en Kafka (pero sync completado): {}",
+            log.error("Error al publicar evento en Kafka (pero sync completado): {}",
                     e.getMessage(), e);
         }
     }
@@ -187,7 +187,7 @@ public class MovieSyncService {
                 }
             }
         } catch (Exception e) {
-            log.warn("⚠️ Couldn't extract rating: {}", e.getMessage());
+            log.warn("Couldn't extract rating: {}", e.getMessage());
         }
         return null;
     }

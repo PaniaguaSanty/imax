@@ -38,7 +38,7 @@ public class MovieEventProducer {
         // Esto asegura que todos los eventos de sync vayan a la misma partición
         String key = "catalog-sync";
 
-        log.info("📤 Publicando evento de sincronización | Total películas: {} | Agregadas: {} | Actualizadas: {} | Removidas: {}",
+        log.info(" Publicando evento de sincronización | Total películas: {} | Agregadas: {} | Actualizadas: {} | Removidas: {}",
                 syncData.getTotalMoviesInCatalog(),
                 syncData.getMoviesAdded(),
                 syncData.getMoviesUpdated(),
@@ -49,12 +49,12 @@ public class MovieEventProducer {
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("✅ Evento de sincronización publicado exitosamente | EventId: {} | Offset: {} | Partition: {}",
+                log.info(" Evento de sincronización publicado exitosamente | EventId: {} | Offset: {} | Partition: {}",
                         event.getEventId(),
                         result.getRecordMetadata().offset(),
                         result.getRecordMetadata().partition());
             } else {
-                log.error("❌ Error al publicar evento de sincronización | EventId: {} | Error: {}",
+                log.error(" Error al publicar evento de sincronización | EventId: {} | Error: {}",
                         event.getEventId(),
                         ex.getMessage(), ex);
             }
@@ -93,11 +93,11 @@ public class MovieEventProducer {
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("✅ Evento publicado | EventId: {} | Offset: {}",
+                log.info(" Evento publicado | EventId: {} | Offset: {}",
                         event.getEventId(),
                         result.getRecordMetadata().offset());
             } else {
-                log.error("❌ Error al publicar evento | EventId: {} | Error: {}",
+                log.error(" Error al publicar evento | EventId: {} | Error: {}",
                         event.getEventId(),
                         ex.getMessage(), ex);
             }

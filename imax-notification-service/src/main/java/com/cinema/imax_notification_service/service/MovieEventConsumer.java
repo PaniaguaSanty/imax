@@ -39,10 +39,10 @@ public class MovieEventConsumer {
             Acknowledgment acknowledgment
     ) {
         try {
-            log.info("📨 Mensaje recibido | EventId: {} | Key: {} | Partition: {} | Offset: {}",
+            log.info("Mensaje recibido | EventId: {} | Key: {} | Partition: {} | Offset: {}",
                     event.getEventId(), key, partition, offset);
 
-            log.info("📊 Tipo de evento: {} | Timestamp: {}",
+            log.info("Tipo de evento: {} | Timestamp: {}",
                     event.getEventType(), event.getTimestamp());
 
             // Procesar el evento según su tipo
@@ -51,10 +51,10 @@ public class MovieEventConsumer {
             // Commit manual - confirma que el mensaje fue procesado correctamente
             acknowledgment.acknowledge();
 
-            log.info("✅ Mensaje procesado y commiteado exitosamente | Offset: {}", offset);
+            log.info("Mensaje procesado y commiteado exitosamente | Offset: {}", offset);
 
         } catch (Exception e) {
-            log.error("❌ Error al procesar mensaje | EventId: {} | Offset: {} | Error: {}",
+            log.error("Error al procesar mensaje | EventId: {} | Offset: {} | Error: {}",
                     event.getEventId(), offset, e.getMessage(), e);
 
             // NO hacemos acknowledge() - el mensaje se volverá a procesar
