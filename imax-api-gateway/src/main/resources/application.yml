@@ -1,8 +1,66 @@
 server:
-  port: 8090   # Podés cambiar el puerto si ya hay otro servicio levantado
+  port: 8090
 
 spring:
   application:
     name: imax-api-gateway
   config:
     import: "optional:configserver:"
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        # -------------------------------
+        # CATALOG SERVICE
+        # -------------------------------
+        - id: catalog-route
+          uri: lb://imax-catalog-service
+          predicates:
+            - Path=/api/catalog/**
+
+        # -------------------------------
+        # SHOWTIME SERVICE
+        # -------------------------------
+        - id: showtime-route
+          uri: lb://imax-showtime-service
+          predicates:
+            - Path=/api/showtime/**
+
+        # -------------------------------
+        # RESERVATION SERVICE
+        # -------------------------------
+        - id: reservation-route
+          uri: lb://imax-reservation-service
+          predicates:
+            - Path=/api/reservation/**
+
+        # -------------------------------
+        # NOTIFICATION SERVICE
+        # -------------------------------
+        - id: notification-route
+          uri: lb://imax-notification-service
+          predicates:
+            - Path=/api/notification/**
+
+# ===================================
+# EUREKA CONFIGURATION
+# ===================================
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+# ===================================
+# LOGGING (debug para probar)
+# ===================================
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
