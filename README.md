@@ -1,4 +1,7 @@
-Sistema de gestión de cine desarrollado con una arquitectura de microservicios en Java Spring Boot. Microservicios | Kafka | Docker | asincronía | despliegue.
+Sistema de gestión de cine desarrollado con una arquitectura de microservicios en Java Spring Boot. Microservicios | Kafka | Docker | asincronía | eureka.
+
+<img width="1561" height="676" alt="image" src="https://github.com/user-attachments/assets/9fe04c2d-f14f-4521-9ecc-11be56dcb6d8" />
+
 
 ## 🚀 Características
 
