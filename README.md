@@ -2,6 +2,7 @@ Sistema de gestión de cine desarrollado con una arquitectura de microservicios 
 
 <img width="1561" height="676" alt="image" src="https://github.com/user-attachments/assets/9fe04c2d-f14f-4521-9ecc-11be56dcb6d8" />
 
+<img width="1570" height="688" alt="image" src="https://github.com/user-attachments/assets/42f10ed9-b5e5-430a-8f3a-952b9ee9301f" />
 
 ## 🚀 Características
 
